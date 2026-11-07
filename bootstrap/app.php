@@ -18,6 +18,12 @@ return Application::configure(basePath: dirname(__DIR__))
      
         $middleware->statefulApi();
 
+        // Kecualikan login dan logout dari CSRF
+        $middleware->validateCsrfTokens(except: [
+            'api/login',
+            'api/logout',
+        ]);
+
         $middleware->append(\App\Http\Middleware\ForceSameSiteNone::class);
 
         $middleware->alias([

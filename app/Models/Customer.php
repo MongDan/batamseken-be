@@ -9,5 +9,10 @@ class Customer extends Model
 {
     use HasUuids; // <--- Tambahkan ini
 
+        public function transactions()
+    {
+        return $this->hasMany(Transaction::class);
+    }
+
     protected $fillable = ['store_id', 'name', 'address', 'phone'];
 }

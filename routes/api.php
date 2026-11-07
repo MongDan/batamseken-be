@@ -9,8 +9,17 @@ Route::post('/login', [AuthController::class, 'login']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
-        Route::post('/transactions/{id}/return', [\App\Http\Controllers\Api\TransactionController::class, 'returnItem']);
+        // Rute Pelanggan (Admin & Owner)
+    Route::get('/customers', [\App\Http\Controllers\Api\CustomerController::class, 'index']);
+    Route::get('/customers/{id}', [\App\Http\Controllers\Api\CustomerController::class, 'show']);
+    Route::post('/transactions/{id}/return', [\App\Http\Controllers\Api\TransactionController::class, 'returnItem']);
     
+        // Rute Pengaturan Toko
+    Route::get('/store', [\App\Http\Controllers\Api\SettingController::class, 'show']); // <--- TAMBAHKAN BARIS INI
+    Route::put('/store', [\App\Http\Controllers\Api\SettingController::class, 'update']);
+    Route::post('/store/qris', [\App\Http\Controllers\Api\SettingController::class, 'uploadQris']);
+    Route::put('/store/admin-pin', [\App\Http\Controllers\Api\SettingController::class, 'updateAdminPin']);
+
     Route::get('/user', function (Request $request) {
         return response()->json($request->user());
     });

@@ -123,6 +123,17 @@ class TransactionController extends Controller
                 TransactionItem::create($trxItem);
             }
 
+            // --- TAMBAHAN BARU: CATAT KE AUDIT LOG ---
+            \App\Models\AuditLog::create([
+                'store_id' => $request->user()->store_id,
+                'user_role' => $request->user()->role,
+                'action' => 'CREATE_TRANSACTION',
+                'entity' => 'Transaction',
+                'entity_id' => $transaction->id,
+                'reason' => 'Transaksi baru berhasil dibuat dengan No. Faktur: ' . $invoiceNo,
+            ]);
+            // -----------------------------------------
+
             DB::commit();
 
             return response()->json([
@@ -152,7 +163,7 @@ class TransactionController extends Controller
         return response()->json(['status' => 'success', 'data' => $transaction]);
     }
 
-        // 4. VOID TRANSAKSI (Admin & Owner)
+    // 4. VOID TRANSAKSI (Admin & Owner)
     public function void(string $id)
     {
         $transaction = Transaction::with('items')->find($id);
@@ -252,7 +263,7 @@ class TransactionController extends Controller
         }
     }
 
-        // 6. RETUR BARANG (Admin & Owner)
+    // 6. RETUR BARANG (Admin & Owner)
     public function returnItem(Request $request, string $id)
     {
         $request->validate([

@@ -2,19 +2,31 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Concerns\HasUuids; // <--- Tambahkan ini
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 
 class TransactionItem extends Model
 {
-    use HasUuids; // <--- Tambahkan ini
+    use HasUuids;
 
     protected $fillable = [
-        'transaction_id', 'variant_id', 'product_name_snapshot',
-        'variant_snapshot', 'qty', 'unit_price', 'subtotal', 'serial_number',
+        'transaction_id', 
+        'variant_id', 
+        'product_name_snapshot',
+        'variant_snapshot', 
+        'qty', 
+        'unit_price', 
+        'subtotal', 
+        'serial_number',
     ];
-        public function transaction()
+
+    public function transaction()
     {
         return $this->belongsTo(Transaction::class);
+    }
+
+    public function variant()
+    {
+        return $this->belongsTo(ProductVariant::class, 'variant_id');
     }
 }

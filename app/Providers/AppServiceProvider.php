@@ -24,5 +24,11 @@ class AppServiceProvider extends ServiceProvider
         if ($this->app->environment('production')) {
             URL::forceScheme('https');
         }
+
+        config([
+        'session.same_site' => 'none',
+        'session.secure' => true,
+        'session.domain' => null,
+    ]);
     }
 }

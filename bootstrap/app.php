@@ -13,22 +13,13 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
         
-        // 1. Wajib untuk Railway (Karena di balik Proxy HTTPS)
         $middleware->trustProxies(at: '*');
 
-        // 2. Wajib untuk Sanctum SPA Auth
+     
         $middleware->statefulApi();
 
-        // 3. Bebaskan endpoint login dari cek CSRF
-        $middleware->validateCsrfTokens(except: [
-            'api/*'
-        ]);
-
-        // 4. Daftarkan Middleware pamungkas kita di urutan paling akhir
-        // (Ini akan menimpa header Set-Cookie tepat sebelum dikirim ke browser)
         $middleware->append(\App\Http\Middleware\ForceSameSiteNone::class);
 
-        // 5. Alias untuk Role
         $middleware->alias([
             'role' => \App\Http\Middleware\RoleMiddleware::class,
         ]);

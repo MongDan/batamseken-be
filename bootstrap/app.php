@@ -22,6 +22,7 @@ return Application::configure(basePath: dirname(__DIR__))
         // 3. Bebaskan endpoint login dari cek CSRF
         $middleware->validateCsrfTokens(except: [
             'api/login',
+             'api/logout',
         ]);
 
         // 4. Daftarkan Middleware pamungkas kita di urutan paling akhir

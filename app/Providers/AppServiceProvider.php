@@ -25,10 +25,5 @@ class AppServiceProvider extends ServiceProvider
             URL::forceScheme('https');
         }
 
-        config([
-        'session.same_site' => 'none',
-        'session.secure' => true,
-        'session.domain' => null,
-    ]);
     }
 }

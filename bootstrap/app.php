@@ -13,9 +13,11 @@ return Application::configure(basePath: dirname(__DIR__))
     )
   ->withMiddleware(function (Middleware $middleware) {
 
-    $middleware->api(prepend: [
-            \App\Http\Middleware\ForceSameSiteNone::class,
-        ]);
+    // 1. Beritahu Laravel kalau dia di balik Proxy HTTPS Railway
+        $middleware->trustProxies(at: '*');
+
+        // 2. Daftarkan Middleware kita sebagai Global (berjalan paling akhir)
+        $middleware->append(\App\Http\Middleware\ForceSameSiteNone::class);
     
     $middleware->statefulApi();
 

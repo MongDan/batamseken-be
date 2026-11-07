@@ -10,10 +10,20 @@ class ForceSameSiteNone
 {
     public function handle(Request $request, Closure $next): Response
     {
-        // Paksa settingan ini sebelum cookie dibuat oleh Sanctum
-        config(['session.same_site' => 'none']);
-        config(['session.secure' => true]);
+        $response = $next($request);
+
+        // Intip semua cookie yang mau dikirim ke browser
+        $headers = $response->headers->all();
         
-        return $next($request);
+        if (isset($headers['set-cookie'])) {
+            foreach ($headers['set-cookie'] as $key => $cookieString) {
+                // Ganti paksa tulisan samesite=lax menjadi samesite=none
+                $headers['set-cookie'][$key] = preg_replace('/samesite=lax/i', 'samesite=none', $cookieString);
+            }
+            // Simpan kembali ke response
+            $response->headers->replace($headers);
+        }
+
+        return $response;
     }
 }
